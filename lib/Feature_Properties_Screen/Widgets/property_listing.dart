@@ -1,0 +1,217 @@
+// lib/Feature_Properties_Screen/Widgets/property_listing.dart
+import 'package:darkom/Feature_Properties_Screen/Controller/property_controller.dart';
+import 'package:darkom/Feature__Lock_Screen/Screen/lock_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:darkom/App_Theme/app_colors.dart';
+import 'package:darkom/App_Theme/app_text.dart';
+import 'package:darkom/App_Theme/app_sizes.dart';
+import 'package:darkom/Feature_Properties_Screen/Screen/property_details_screen.dart';
+
+class PropertyListItem extends StatelessWidget {
+  final PropertyItem property;
+  final VoidCallback? onTap;
+  final VoidCallback? onKeyTap;
+
+  const PropertyListItem({
+    super.key,
+    required this.property,
+    this.onTap,
+    this.onKeyTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: const Color(0xFF1F1F1F),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(AppSizes.propertyCardRadius),
+          bottomLeft: Radius.circular(AppSizes.propertyCardRadius),
+          bottomRight: Radius.circular(AppSizes.propertyCardRadius),
+        ),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap ??
+            () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => PropertyDetailsScreen(property: property),
+                  ),
+                ),
+        child: Container(
+          width: AppSizes.propertyCardWidth,
+          constraints: const BoxConstraints(minHeight: 140),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+          child: Row(
+            textDirection: TextDirection.ltr,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: _FilledStatusChip(
+                        text: property.status.label,
+                        color: property.status.color,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      property.title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppText.heading6,
+                    ),
+                    Text(
+                      '${property.city}، ${property.district}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style:
+                          AppText.small2.copyWith(color: AppColors.dark300),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          property.price.split(' ')[0],
+                          style: AppText.heading6.copyWith(
+                            color: AppColors.emerald500,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        Text(
+                          property.price.replaceFirst(
+                              property.price.split(' ')[0], ''),
+                          style: AppText.small2
+                              .copyWith(color: AppColors.dark300),
+                        ),
+                      ],
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Image.asset(
+                        'images/Property_Listings/propertyCard/propertyArrow.png',
+                        width: AppSizes.arrowWidth,
+                        height: AppSizes.arrowHeight,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 12),
+
+              SizedBox(
+                width: AppSizes.propertyImageWidth,
+                height: AppSizes.propertyImageHeight,
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topLeft:
+                            Radius.circular(AppSizes.propertyImageRadius),
+                        bottomLeft:
+                            Radius.circular(AppSizes.propertyImageRadius),
+                        bottomRight:
+                            Radius.circular(AppSizes.propertyImageRadius),
+                      ),
+                      child: Image.asset(
+                        property.image ??
+                            'assets/images/default_property.png',
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => Container(
+                          color: const Color(0xFF2A2A2A),
+                          alignment: Alignment.center,
+                          child:
+                              const Icon(Icons.image, color: Colors.grey),
+                        ),
+                      ),
+                    ),
+
+                    Positioned(
+                      right: -10,
+                      bottom: -8,
+                      child: InkWell(
+                        onTap: onKeyTap ??
+                            () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => DoorLockScreen(
+                                    propertyName: property.title,
+                                  ),
+                                ),
+                              );
+                            },
+                        borderRadius: BorderRadius.circular(
+                            AppSizes.lockCircleWidth),
+                        child: Container(
+                          width: AppSizes.lockCircleWidth,
+                          height: AppSizes.lockCircleHeight,
+                          decoration: BoxDecoration(
+                            color: AppColors.emerald500,
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.emerald500.withOpacity(.35),
+                                blurRadius: 16,
+                                spreadRadius: 1,
+                              ),
+                            ],
+                          ),
+                          alignment: Alignment.center,
+                          child: Image.asset(
+                            'images/Property_Listings/propertyCard/lock.png',
+                            width: AppSizes.lockWidth,
+                            height: AppSizes.lockHeight,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _FilledStatusChip extends StatelessWidget {
+  final String text;
+  final Color color;
+  const _FilledStatusChip({required this.text, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 6),
+      child: Container(
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(10),
+            bottomLeft: Radius.circular(10),
+            bottomRight: Radius.circular(10),
+          ),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+        child: Text(
+          text,
+          style: AppText.small.copyWith(
+            color: Colors.white,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+    );
+  }
+}
