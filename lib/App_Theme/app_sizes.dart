@@ -1,7 +1,20 @@
 class AppSizes {
+  // Onboarding pics sizes
+  // pic 1 
+  static double onboardingWidth1 = 469;
+  static double onboardingHeight1 = 469;
+
+  // pic 2
+  static double onboardingWidth2 = 490; 
+  static double onboardingHeight2 = 490; 
+
+  // pic 3
+  static double onboardingWidth3 = 349.31; 
+  static double onboardingHeight3 = 349.31; 
+
   // Shadow Elevation 
   static double shadowElevation = 10;
-  
+
   // Intro Screen Button Sizes
   static double introButtonWidth = 54;
   static double introButtonHeight = 54;

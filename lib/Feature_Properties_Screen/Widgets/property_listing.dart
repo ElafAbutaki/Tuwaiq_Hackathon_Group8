@@ -1,4 +1,3 @@
-// lib/Feature_Properties_Screen/Widgets/property_listing.dart
 import 'package:darkom/Feature_Properties_Screen/Controller/property_controller.dart';
 import 'package:darkom/Feature__Lock_Screen/Screen/lock_screen.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +6,8 @@ import 'package:darkom/App_Theme/app_text.dart';
 import 'package:darkom/App_Theme/app_sizes.dart';
 import 'package:darkom/Feature_Properties_Screen/Screen/property_details_screen.dart';
 
+/// Widget that displays a single property card in the property listing screen.
+/// Each card shows property info, image, and a lock button that navigates to LockScreen.
 class PropertyListItem extends StatelessWidget {
   final PropertyItem property;
   final VoidCallback? onTap;
@@ -32,6 +33,7 @@ class PropertyListItem extends StatelessWidget {
       ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
+        // Tap on card → navigate to Property Details
         onTap: onTap ??
             () => Navigator.push(
                   context,
@@ -47,11 +49,13 @@ class PropertyListItem extends StatelessWidget {
             textDirection: TextDirection.ltr,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // --------- Property Info Section ---------
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                    // Status chip (top-left of card)
                     Align(
                       alignment: Alignment.centerLeft,
                       child: _FilledStatusChip(
@@ -60,12 +64,16 @@ class PropertyListItem extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 4),
+
+                    // Property title
                     Text(
                       property.title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: AppText.heading6,
                     ),
+
+                    // City and district
                     Text(
                       '${property.city}، ${property.district}',
                       maxLines: 1,
@@ -73,24 +81,40 @@ class PropertyListItem extends StatelessWidget {
                       style:
                           AppText.small2.copyWith(color: AppColors.dark300),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          property.price.split(' ')[0],
-                          style: AppText.heading6.copyWith(
-                            color: AppColors.emerald500,
-                            fontWeight: FontWeight.w700,
+
+                    // Price (right aligned)
+                    const SizedBox(height: 4),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: RichText(
+                        textAlign: TextAlign.right,
+                        textDirection: TextDirection.rtl,
+                        text: TextSpan(
+                          style: AppText.small2.copyWith(
+                            color: AppColors.dark300,
                           ),
+                          children: [
+                            TextSpan(
+                              text: '${property.price.split(' ')[0]} ',
+                              style: AppText.heading6.copyWith(
+                                color: AppColors.emerald500,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            TextSpan(
+                              text: property.price.replaceFirst(
+                                property.price.split(' ')[0],
+                                '',
+                              ),
+                            ),
+                          ],
                         ),
-                        Text(
-                          property.price.replaceFirst(
-                              property.price.split(' ')[0], ''),
-                          style: AppText.small2
-                              .copyWith(color: AppColors.dark300),
-                        ),
-                      ],
+                      ),
                     ),
+
+                    const SizedBox(height: 2),
+
+                    // Arrow icon at bottom-left
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Image.asset(
@@ -103,14 +127,17 @@ class PropertyListItem extends StatelessWidget {
                   ],
                 ),
               ),
+
               const SizedBox(width: 12),
 
+              // --------- Property Image + Lock Button ---------
               SizedBox(
                 width: AppSizes.propertyImageWidth,
                 height: AppSizes.propertyImageHeight,
                 child: Stack(
                   clipBehavior: Clip.none,
                   children: [
+                    // Property image
                     ClipRRect(
                       borderRadius: BorderRadius.only(
                         topLeft:
@@ -121,18 +148,17 @@ class PropertyListItem extends StatelessWidget {
                             Radius.circular(AppSizes.propertyImageRadius),
                       ),
                       child: Image.asset(
-                        property.image ??
-                            'assets/images/default_property.png',
+                        property.image ?? 'assets/images/default_property.png',
                         fit: BoxFit.cover,
                         errorBuilder: (_, __, ___) => Container(
                           color: const Color(0xFF2A2A2A),
                           alignment: Alignment.center,
-                          child:
-                              const Icon(Icons.image, color: Colors.grey),
+                          child: const Icon(Icons.image, color: Colors.grey),
                         ),
                       ),
                     ),
 
+                    // Lock button (bottom-right)
                     Positioned(
                       right: -10,
                       bottom: -8,
@@ -185,9 +211,11 @@ class PropertyListItem extends StatelessWidget {
   }
 }
 
+/// Small colored status tag used in each property card.
 class _FilledStatusChip extends StatelessWidget {
   final String text;
   final Color color;
+
   const _FilledStatusChip({required this.text, required this.color});
 
   @override

@@ -22,36 +22,61 @@ class CustomTextFormField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
+        // Label above the input
         Text(
           label,
           style: AppText.small.copyWith(color: AppColors.dark300),
           textAlign: TextAlign.right,
         ),
-        SizedBox(height: 14),
+        const SizedBox(height: 14),
 
+        // Fixed width so the input doesn't jump when error appears
         SizedBox(
           width: AppSizes.textFormFieldWidth,
-          child: TextFormField(
-            controller: controller,
-            validator: validator,
-            keyboardType: keyboardType,
-            textAlign: TextAlign.right,
-            style: AppText.paragraph.copyWith(color: AppColors.light500),
-            decoration: InputDecoration(
-              isDense: true,
-              contentPadding:
-                   EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          child: Directionality(
+            //  Make ONLY the input (and its error text) RTL
+            textDirection: TextDirection.rtl,
+            child: TextFormField(
+              controller: controller,
+              validator: validator,
+              keyboardType: keyboardType,
+              textAlign: TextAlign.right,
+              style: AppText.paragraph.copyWith(color: AppColors.light500),
+              decoration: const InputDecoration().copyWith(
+                isDense: true,
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
 
-              errorStyle: TextStyle(
-                color: Colors.red,
-                height: 1.2, 
-              ),
+                // Right-to-left error text that doesn't change height much
+                errorStyle: const TextStyle(
+                  color: Colors.red,
+                  height: 1.2,
+                ),
+                errorMaxLines: 2,
 
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(AppSizes.textFormFieldRadius),
-                  bottomLeft: Radius.circular(AppSizes.textFormFieldRadius),
-                  bottomRight: Radius.circular(AppSizes.textFormFieldRadius),
+                // Single 3-corners radius (leaving top-right square per your style)
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(AppSizes.textFormFieldRadius),
+                    bottomLeft: Radius.circular(AppSizes.textFormFieldRadius),
+                    bottomRight: Radius.circular(AppSizes.textFormFieldRadius),
+                  ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: AppColors.dark400),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(AppSizes.textFormFieldRadius),
+                    bottomLeft: Radius.circular(AppSizes.textFormFieldRadius),
+                    bottomRight: Radius.circular(AppSizes.textFormFieldRadius),
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: AppColors.emerald500, width: 1.5),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(AppSizes.textFormFieldRadius),
+                    bottomLeft: Radius.circular(AppSizes.textFormFieldRadius),
+                    bottomRight: Radius.circular(AppSizes.textFormFieldRadius),
+                  ),
                 ),
               ),
             ),
@@ -61,4 +86,3 @@ class CustomTextFormField extends StatelessWidget {
     );
   }
 }
-

@@ -2,6 +2,7 @@ import 'package:darkom/App_Theme/app_sizes.dart';
 import 'package:darkom/App_Theme/app_text.dart';
 import 'package:flutter/material.dart';
 
+/// Simple greeting header with avatar + notification icon + title.
 class Header extends StatelessWidget {
   const Header({super.key});
 
@@ -10,24 +11,20 @@ class Header extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        CircleAvatar(
+        const CircleAvatar(
           radius: 30,
           backgroundImage: AssetImage('images/HomeScreen/header/avatar.png'),
         ),
+        const SizedBox(width: 15),
 
-        SizedBox(width: 15),
-         Image.asset(
-            "images/HomeScreen/header/notification.png",
-            width: AppSizes.notificationWidth, 
-            height: AppSizes.notificationHeight, 
-            ),
-      
+        Image.asset(
+          'images/HomeScreen/header/notification.png',
+          width: AppSizes.notificationWidth,
+          height: AppSizes.notificationHeight,
+        ),
 
-        Spacer(),
-        Text(
-          "مرحبًا صالح", 
-          style: AppText.heading3,
-          ),
+        const Spacer(),
+        Text('مرحبًا صالح', style: AppText.heading3),
       ],
     );
   }

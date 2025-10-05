@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:darkom/App_Theme/app_colors.dart';
 import 'package:darkom/App_Theme/app_text.dart';
+import 'package:darkom/Feature_Home_screen/Screen/home_screen.dart';
 import 'package:darkom/Feature_Login_Screen/Screens/login_nafath_id_screen.dart';
 import 'package:darkom/Feature_Login_Screen/Widgets/Login_Intro_Screen_Widgets/logo.dart';
 import 'package:darkom/Reusable_Widgets/Widgets/emerald_button.dart';
 import 'package:darkom/Reusable_Widgets/Widgets/text_button.dart';
 
+/// First login splash/intro with the logo + two actions
 class LoginIntroScreen extends StatelessWidget {
   const LoginIntroScreen({super.key});
 
@@ -17,34 +19,21 @@ class LoginIntroScreen extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end, 
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              SizedBox(height: 50),
+              const SizedBox(height: 50),
+              const Align(alignment: Alignment.topCenter, child: Logo()),
+              const SizedBox(height: 400),
 
-              Align(
-                alignment: Alignment.topCenter,
-                child: Logo(),
-              ),
-    
-              SizedBox(height: 400),
-  
-              Text(
-                'مرحبًا بك في داركم',
-                textAlign: TextAlign.right,
-                style: AppText.heading4,
-              ),
-              
-              SizedBox(height: 10),
-    
+              Text('مرحبًا بك في داركم',
+                  style: AppText.heading4, textAlign: TextAlign.right),
+              const SizedBox(height: 10),
               Text(
                 'اختر الطريقة المناسبة للدخول إلى حسابك أو أنشئ حسابًا جديدًا للبدء في إدارة عقاراتك بسهولة',
+                style: AppText.paragraph.copyWith(color: AppColors.dark300),
                 textAlign: TextAlign.right,
-                style: AppText.paragraph.copyWith(
-                  color: AppColors.dark300,
-                ),
               ),
-    
-              SizedBox(height: 18),
+              const SizedBox(height: 18),
 
               Align(
                 alignment: Alignment.center,
@@ -58,21 +47,22 @@ class LoginIntroScreen extends StatelessWidget {
                   },
                 ),
               ),
-    
-              SizedBox(height: 10),
-    
-              
+              const SizedBox(height: 10),
+
               Align(
                 alignment: Alignment.center,
                 child: CustomTextButton(
                   label: 'المتابعة كضيف',
                   underline: true,
                   onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const HomeScreen()),
+                    );
                   },
                 ),
               ),
-    
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
             ],
           ),
         ),

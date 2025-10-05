@@ -1,12 +1,16 @@
 // lib/Feature_Properties_Screen/Screens/property_details_screen.dart
+import 'package:darkom/App_Theme/app_colors.dart';
+import 'package:darkom/App_Theme/app_text.dart';
 import 'package:darkom/Feature_Properties_Screen/Controller/property_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class PropertyDetailsScreen extends StatelessWidget {
-  final PropertyItem property;
   const PropertyDetailsScreen({super.key, required this.property});
 
+  final PropertyItem property;
+
+  // Shared rounded corners (3-corner style used across cards)
   static const _r = Radius.circular(12);
   static const _threeCorners = BorderRadius.only(
     topLeft: _r,
@@ -14,64 +18,69 @@ class PropertyDetailsScreen extends StatelessWidget {
     bottomRight: _r,
   );
 
+  // Panels visibility (based on status)
   bool get _showTenantPanel =>
       property.status == PropertyStatus.lateExit ||
       property.status == PropertyStatus.notAvailable;
-
   bool get _showEvictionPanel => property.status == PropertyStatus.lateExit;
 
   @override
   Widget build(BuildContext context) {
     final pos = LatLng(property.lat, property.lng);
 
-    return Directionality(
+    return Directionality( // force full RTL layout
       textDirection: TextDirection.rtl,
       child: Scaffold(
         backgroundColor: const Color(0xFF121212),
+
+        // AppBar: default back (no extra arrow)
         appBar: AppBar(
           backgroundColor: const Color(0xFF121212),
           elevation: 0,
           iconTheme: const IconThemeData(color: Colors.white),
-          title: Text(
-            property.title,
-            style: const TextStyle(color: Colors.white),
-          ),
-          actions: const [
-            Padding(
-              padding: EdgeInsetsDirectional.only(end: 12),
-              child: Icon(Icons.arrow_forward_ios,
-                  color: Colors.white70, size: 18),
-            ),
-          ],
+          centerTitle: false,
+          title: Text(property.title, style: const TextStyle(color: Colors.white)),
         ),
+
         body: SafeArea(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text(
-                  property.title,
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
+                // ---------- Header (ONE ROW: title right, price left) ----------
+                Row(
+                  textDirection: TextDirection.rtl, // lay out from right to left
+                  children: [
+                    // Title on the right (Heading5)
+                    Flexible(
+                      child: Text(
+                        '${property.title} - ${property.district}',
+                        style: AppText.heading5,
+                        textAlign: TextAlign.right,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const Spacer(),
+                    // Price on the left (Paragraph + dark300)
+                    Text(
+                      property.price,
+                      style: AppText.paragraph.copyWith(color: AppColors.dark300),
+                      textAlign: TextAlign.left,
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 6),
+
+                // Small line under header (Paragraph + dark300)
                 Text(
-                  property.price,
-                  style: const TextStyle(
-                      color: Color(0xFF3DBE9A),
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  '${property.city}، ${property.district}',
-                  style: const TextStyle(color: Colors.grey),
+                  property.city,
+                  style: AppText.paragraph.copyWith(color: AppColors.dark300),
+                  textAlign: TextAlign.right,
                 ),
                 const SizedBox(height: 12),
 
+                // ---------- Main image + lock badge ----------
                 Stack(
                   children: [
                     ClipRRect(
@@ -85,22 +94,20 @@ class PropertyDetailsScreen extends StatelessWidget {
                           height: 210,
                           color: const Color(0xFF1E1E1E),
                           alignment: Alignment.center,
-                          child: const Icon(Icons.image,
-                              color: Colors.white38, size: 28),
+                          child: const Icon(Icons.image, color: Colors.white38, size: 28),
                         ),
                       ),
                     ),
                     Positioned(
                       left: 0,
                       bottom: 0,
-                      child: _tealCircle(
-                        const Icon(Icons.lock, color: Colors.white, size: 20),
-                      ),
+                      child: _tealCircle(const Icon(Icons.lock, color: Colors.white, size: 20)),
                     ),
                   ],
                 ),
                 const SizedBox(height: 18),
 
+                // ========== Panel 1 ==========
                 _PanelCard(
                   number: 1,
                   title: 'معلومات العقار الأساسية',
@@ -108,24 +115,21 @@ class PropertyDetailsScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
+                      // Status row — label starts at the right
                       Row(
+                        textDirection: TextDirection.rtl,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          _StatusChip(
-                            text: property.status.label,
-                            color: property.status.color,
-                          ),
-                          const Spacer(),
                           const Text('الحالة',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600),
-                                  ),
+                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
+                          _StatusChip(text: property.status.label, color: property.status.color),
                         ],
                       ),
                       _divider(),
                       const _InfoRow(
-                          title: 'عدد الغرف',
-                          value: '٧ غرف (٢ نوم + مجلس + صالة + غرفة غسيل)'),
+                        title: 'عدد الغرف',
+                        value: '٧ غرف (٢ نوم + مجلس + صالة + غرفة غسيل)',
+                      ),
                       _divider(),
                       const _InfoRow(title: 'الحمامات', value: '٤ حمامات'),
                       _divider(),
@@ -134,19 +138,18 @@ class PropertyDetailsScreen extends StatelessWidget {
                       const _InfoRow(title: 'نوع العقار', value: 'فيلا'),
                       _divider(),
                       const _InfoRow(title: 'نوع السكن', value: 'عائلي'),
-
                       const SizedBox(height: 16),
 
+                      // ---- الموقع ----
                       const _SubSectionTitle('الموقع'),
                       const SizedBox(height: 8),
                       Row(
                         children: [
-                          const Icon(Icons.place,
-                              size: 16, color: Colors.white70),
+                          const Icon(Icons.place, size: 16, color: Colors.white70),
                           const SizedBox(width: 6),
                           Expanded(
                             child: Text(
-                              '${property.city}، حي ${property.district} – ${property.title}',
+                              '${property.city} – ${property.district}، رقم: ${property.title}',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(color: Colors.white70),
@@ -160,8 +163,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                         child: SizedBox(
                           height: 190,
                           child: GoogleMap(
-                            initialCameraPosition:
-                                CameraPosition(target: pos, zoom: 14),
+                            initialCameraPosition: CameraPosition(target: pos, zoom: 14),
                             markers: {
                               Marker(
                                 markerId: const MarkerId('property'),
@@ -177,6 +179,7 @@ class PropertyDetailsScreen extends StatelessWidget {
 
                       const SizedBox(height: 16),
 
+                      // ---- المميزات ----
                       const _SubSectionTitle('المميزات'),
                       const SizedBox(height: 8),
                       const Wrap(
@@ -194,6 +197,7 @@ class PropertyDetailsScreen extends StatelessWidget {
 
                       const SizedBox(height: 16),
 
+                      // ---- القواعد والضوابط ----
                       const _SubSectionTitle('القواعد والضوابط'),
                       const SizedBox(height: 8),
                       const _RuleTile(
@@ -206,6 +210,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                         leadingIcon: 'assets/icons/terms_rule.png',
                       ),
 
+                      // Attachments for lateExit & notAvailable
                       if (_showTenantPanel) ...[
                         const SizedBox(height: 16),
                         const _SubSectionTitle('المرفقات'),
@@ -220,6 +225,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                   ),
                 ),
 
+                // ========== Panel 2 (Tenant) ==========
                 if (_showTenantPanel)
                   _PanelCard(
                     number: 2,
@@ -228,21 +234,20 @@ class PropertyDetailsScreen extends StatelessWidget {
                     child: _TenantCard(
                       name: property.status == PropertyStatus.lateExit
                           ? 'علي الزهراني'
-                          : 'منيرة العاصمي',
+                          : 'منيرة الغامدي',
                       id: property.status == PropertyStatus.lateExit
                           ? '1-199399941'
                           : '129983476',
                       phone: property.status == PropertyStatus.lateExit
                           ? '+966 59XXXXXXX'
                           : '+966 5XXXXXXX',
-                      rating: property.status == PropertyStatus.lateExit
-                          ? '٣٫٤'
-                          : '٣٫٦',
+                      rating: property.status == PropertyStatus.lateExit ? '٣٫٤' : '٣٫٦',
                       startH: '١٦ صفر ١٤٦٧هـ',
                       endH: '١٢ ربيع الأول ١٤٦٧هـ',
                     ),
                   ),
 
+                // ========== Panel 3 (Eviction) ==========
                 if (_showEvictionPanel)
                   _PanelCard(
                     number: 3,
@@ -268,8 +273,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                             ),
                             onPressed: () {},
                             child: const Text('طلب إخلاء',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 16)),
+                                style: TextStyle(color: Colors.white, fontSize: 16)),
                           ),
                         ),
                       ],
@@ -283,6 +287,7 @@ class PropertyDetailsScreen extends StatelessWidget {
     );
   }
 
+  // Small teal circle on the image
   Widget _tealCircle(Widget child) => Container(
         width: 44,
         height: 44,
@@ -294,6 +299,8 @@ class PropertyDetailsScreen extends StatelessWidget {
       );
 }
 
+// ---------- Helpers ----------
+
 Widget _divider() => Container(
       height: 1,
       color: const Color(0xFF2A2A2A),
@@ -301,8 +308,9 @@ Widget _divider() => Container(
     );
 
 class _SubSectionTitle extends StatelessWidget {
-  final String text;
   const _SubSectionTitle(this.text, {super.key});
+  final String text;
+
   @override
   Widget build(BuildContext context) => Text(
         text,
@@ -314,29 +322,36 @@ class _SubSectionTitle extends StatelessWidget {
       );
 }
 
+// Single info row (title should start from the right)
 class _InfoRow extends StatelessWidget {
+  const _InfoRow({required this.title, required this.value, super.key});
   final String title;
   final String value;
-  const _InfoRow({required this.title, required this.value, super.key});
+
   @override
   Widget build(BuildContext context) => Row(
+        textDirection: TextDirection.rtl, // ensure start at right
         children: [
-          Expanded(
-            child: Text(value,
-                textAlign: TextAlign.left,
-                style: const TextStyle(color: Colors.white70)),
+          Text(
+            title,
+            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
           ),
           const SizedBox(width: 12),
-          Text(title,
-              style: const TextStyle(
-                  color: Colors.white, fontWeight: FontWeight.w600)),
+          Expanded(
+            child: Text(
+              value,
+              textAlign: TextAlign.left,
+              style: const TextStyle(color: Colors.white70),
+            ),
+          ),
         ],
       );
 }
 
 class _FeaturePill extends StatelessWidget {
-  final String label;
   const _FeaturePill(this.label, {super.key});
+  final String label;
+
   @override
   Widget build(BuildContext context) => Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -345,15 +360,15 @@ class _FeaturePill extends StatelessWidget {
           border: Border.all(color: const Color(0xFF3E3E3E)),
           borderRadius: BorderRadius.circular(22),
         ),
-        child: Text(label,
-            style: const TextStyle(color: Colors.white70, fontSize: 12)),
+        child: Text(label, style: const TextStyle(color: Colors.white70, fontSize: 12)),
       );
 }
 
+// Rules row (icon at right, chevron at left; no extra arrow on the far right)
 class _RuleTile extends StatelessWidget {
+  const _RuleTile({required this.title, required this.leadingIcon, super.key});
   final String title;
   final String leadingIcon;
-  const _RuleTile({required this.title, required this.leadingIcon, super.key});
 
   static const _r = Radius.circular(10);
   static const _three = BorderRadius.only(
@@ -373,29 +388,30 @@ class _RuleTile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12),
         child: Row(
           children: [
-            const Icon(Icons.arrow_back_ios_new,
-                size: 16, color: Colors.white70),
+            const Icon(Icons.chevron_left, size: 18, color: Colors.white70),
             const Spacer(),
             Text(title,
-                style: const TextStyle(
-                    color: Color(0xFF3DBE9A), fontWeight: FontWeight.w600)),
+                style:
+                    const TextStyle(color: Color(0xFF3DBE9A), fontWeight: FontWeight.w600)),
             const SizedBox(width: 10),
-            Image.asset(leadingIcon,
-                width: 18, height: 18, errorBuilder: (_, __, ___) => const SizedBox()),
+            Image.asset(leadingIcon, width: 18, height: 18,
+                errorBuilder: (_, __, ___) => const SizedBox()),
           ],
         ),
       );
 }
 
 class _AttachmentPill extends StatelessWidget {
+  const _AttachmentPill({
+    super.key,
+    required this.text,
+    required this.onDownload,
+    required this.onDelete,
+  });
   final String text;
   final VoidCallback onDownload;
   final VoidCallback onDelete;
-  const _AttachmentPill(
-      {super.key,
-      required this.text,
-      required this.onDownload,
-      required this.onDelete});
+
   @override
   Widget build(BuildContext context) => Container(
         height: 46,
@@ -409,32 +425,33 @@ class _AttachmentPill extends StatelessWidget {
           children: [
             IconButton(
               onPressed: onDelete,
-              icon: const Icon(Icons.delete_outline,
-                  color: Colors.white70, size: 20),
+              icon: const Icon(Icons.delete_outline, color: Colors.white70, size: 20),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
             ),
             const SizedBox(width: 6),
             IconButton(
               onPressed: onDownload,
-              icon: const Icon(Icons.download_rounded,
-                  color: Colors.white70, size: 22),
+              icon: const Icon(Icons.download_rounded, color: Colors.white70, size: 22),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
             ),
             const Spacer(),
             Flexible(
-                child:
-                    Text(text, style: const TextStyle(color: Colors.white70))),
+              child: Text(text,
+                  style: const TextStyle(color: Colors.white70),
+                  overflow: TextOverflow.ellipsis),
+            ),
           ],
         ),
       );
 }
 
 class _StatusChip extends StatelessWidget {
+  const _StatusChip({required this.text, required this.color});
   final String text;
   final Color color;
-  const _StatusChip({required this.text, required this.color});
+
   @override
   Widget build(BuildContext context) => Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
@@ -444,24 +461,23 @@ class _StatusChip extends StatelessWidget {
           border: Border.all(color: color, width: 1),
         ),
         child: Text(text,
-            style: TextStyle(
-                color: color, fontSize: 11, fontWeight: FontWeight.w600)),
+            style: TextStyle(color: color, fontSize: 11, fontWeight: FontWeight.w600)),
       );
 }
 
-
+// Collapsible panel card with a numeric badge (1/2/3)
 class _PanelCard extends StatefulWidget {
-  final int number; 
-  final String title;
-  final Widget child;
-  final bool initiallyExpanded;
-
   const _PanelCard({
     required this.number,
     required this.title,
     required this.child,
     this.initiallyExpanded = false,
   });
+
+  final int number;
+  final String title;
+  final Widget child;
+  final bool initiallyExpanded;
 
   @override
   State<_PanelCard> createState() => _PanelCardState();
@@ -482,27 +498,28 @@ class _PanelCardState extends State<_PanelCard> {
       child: Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
-          tilePadding:
-              const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          tilePadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
           collapsedIconColor: Colors.white70,
           iconColor: Colors.white70,
           initiallyExpanded: _expanded,
           onExpansionChanged: (v) => setState(() => _expanded = v),
+
+          // **Title starts from the right** (title then badge)
           title: Row(
+            textDirection: TextDirection.rtl,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.expand_more, color: Colors.white70, size: 20),
-              const Spacer(),
               Text(widget.title,
-                  style: const TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.w700)),
+                  style:
+                      const TextStyle(color: Colors.white, fontWeight: FontWeight.w700)),
               const SizedBox(width: 8),
               _Badge(number: widget.number),
             ],
           ),
+
           children: [
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
               child: widget.child,
             ),
           ],
@@ -513,37 +530,27 @@ class _PanelCardState extends State<_PanelCard> {
 }
 
 class _Badge extends StatelessWidget {
-  final int number;
   const _Badge({required this.number});
+  final int number;
+
   @override
   Widget build(BuildContext context) => Container(
         width: 24,
         height: 24,
+        alignment: Alignment.center,
         decoration: BoxDecoration(
           color: const Color(0xFF1F3B33),
           borderRadius: BorderRadius.circular(999),
           border: Border.all(color: const Color(0xFF3DBE9A)),
         ),
-        alignment: Alignment.center,
-        child: Text(
-          '$number',
-          style: const TextStyle(
-              color: Color(0xFF3DBE9A),
-              fontSize: 12,
-              fontWeight: FontWeight.w700),
-        ),
+        child: Text('$number',
+            style: const TextStyle(
+                color: Color(0xFF3DBE9A), fontSize: 12, fontWeight: FontWeight.w700)),
       );
 }
 
-
+// Tenant card (panel 2)
 class _TenantCard extends StatelessWidget {
-  final String name;
-  final String id;
-  final String phone;
-  final String rating;
-  final String startH;
-  final String endH;
-
   const _TenantCard({
     required this.name,
     required this.id,
@@ -551,7 +558,15 @@ class _TenantCard extends StatelessWidget {
     required this.rating,
     required this.startH,
     required this.endH,
+    super.key,
   });
+
+  final String name;
+  final String id;
+  final String phone;
+  final String rating;
+  final String startH;
+  final String endH;
 
   @override
   Widget build(BuildContext context) {
@@ -585,14 +600,13 @@ class _TenantCard extends StatelessWidget {
                 ),
               ),
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
                   color: const Color(0xFF1F3B33),
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: Text(rating,
-                    style: const TextStyle(color: Color(0xFF3DBE9A))),
+                child:
+                    Text(rating, style: const TextStyle(color: Color(0xFF3DBE9A))),
               ),
             ],
           ),
@@ -623,8 +637,8 @@ class _TenantCard extends StatelessWidget {
           Text(value, style: const TextStyle(color: Colors.white70)),
           const SizedBox(width: 8),
           Text(label,
-              style: const TextStyle(
-                  color: Colors.white, fontWeight: FontWeight.w600)),
+              style:
+                  const TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
         ],
       ),
     );

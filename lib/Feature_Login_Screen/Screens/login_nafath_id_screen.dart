@@ -1,13 +1,14 @@
-import 'package:darkom/App_Theme/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:darkom/App_Theme/app_colors.dart';
 import 'package:darkom/App_Theme/app_text.dart';
+import 'package:darkom/Reusable_Widgets/Widgets/back_button.dart';
 import 'package:darkom/Reusable_Widgets/Widgets/emerald_button.dart';
 import 'package:darkom/Reusable_Widgets/Widgets/text_button.dart';
-import 'package:darkom/Reusable_Widgets/Widgets/back_button.dart'; // your custom image back arrow
 import 'package:darkom/Feature_Login_Screen/Widgets/Nafath_ID_Screen_Widgets/text_form_field.dart';
 import 'package:darkom/Feature_Login_Screen/Controller/Nafath_ID_Controller/nafath_id_controller.dart';
 import 'package:darkom/Feature_Login_Screen/Screens/login_nafath_OTP.dart';
 
+/// Nafath ID entry screen (one text field + actions)
 class NafathIDScreen extends StatelessWidget {
   NafathIDScreen({super.key});
 
@@ -22,29 +23,26 @@ class NafathIDScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
+              // Back arrow (top-right)
               Align(
                 alignment: Alignment.topRight,
                 child: BackArrowButton(
                   onPressed: () => Navigator.of(context).pop(),
                 ),
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
 
-              Text(
-                'تسجيل الدخول عبر نفاذ',
-                style: AppText.heading4,
-                textAlign: TextAlign.right,
-              ),
-              SizedBox(height: 8),
-
+              // Title + subtitle
+              Text('تسجيل الدخول عبر نفاذ',
+                  style: AppText.heading4, textAlign: TextAlign.right),
+              const SizedBox(height: 8),
               Text(
                 'يمكنك الدخول باستخدام حسابك المسجل بتطبيق نفاذ',
-                style: AppText.paragraph.copyWith(
-                  color: AppColors.dark300, 
-                ),
+                style: AppText.paragraph.copyWith(color: AppColors.dark300),
                 textAlign: TextAlign.right,
               ),
-              SizedBox(height: 40),
+
+              const SizedBox(height: 40),
 
               Form(
                 key: controller.formKey,
@@ -55,8 +53,9 @@ class NafathIDScreen extends StatelessWidget {
                 ),
               ),
 
-              SizedBox(height: 350),
+              const Spacer(),
 
+              // Store link
               Center(
                 child: CustomTextButton(
                   label: 'تحميل تطبيق نفاذ',
@@ -64,13 +63,15 @@ class NafathIDScreen extends StatelessWidget {
                   onPressed: controller.launchNafathStore,
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
+              // Continue button
               Center(
                 child: EmeraldButton(
                   label: 'استمرار',
                   onPressed: () {
-                    final ok = controller.formKey.currentState?.validate() ?? false;
+                    final ok =
+                        controller.formKey.currentState?.validate() ?? false;
                     if (ok) {
                       Navigator.push(
                         context,
@@ -78,7 +79,7 @@ class NafathIDScreen extends StatelessWidget {
                           builder: (_) => const NafathCodeScreen(),
                         ),
                       );
-                    } 
+                    }
                   },
                 ),
               ),

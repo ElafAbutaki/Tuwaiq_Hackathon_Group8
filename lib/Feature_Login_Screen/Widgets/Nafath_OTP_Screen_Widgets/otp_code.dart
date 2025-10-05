@@ -3,14 +3,10 @@ import 'package:darkom/App_Theme/app_colors.dart';
 import 'package:darkom/App_Theme/app_sizes.dart';
 import 'package:darkom/App_Theme/app_text.dart';
 
+/// Green glowing 2-digit code box 
 class NafathOTP extends StatelessWidget {
-  final String text; 
-
-  const NafathOTP({
-    super.key,
-    required this.text,
-  });
-
+  final String text;
+  const NafathOTP({super.key, required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -21,27 +17,19 @@ class NafathOTP extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.dark500,
         borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(AppSizes.otpRadius),
-        bottomLeft: Radius.circular(AppSizes.otpRadius),
-        bottomRight: Radius.circular(AppSizes.otpRadius),
+          topLeft: Radius.circular(AppSizes.otpRadius),
+          bottomLeft: Radius.circular(AppSizes.otpRadius),
+          bottomRight: Radius.circular(AppSizes.otpRadius),
         ),
-
         border: Border.all(
           color: AppColors.emerald500,
           width: AppSizes.otpBorderWidth,
         ),
-
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.emerald500,
-            blurRadius: 16,
-          ),
+        boxShadow: const [
+          BoxShadow(color: AppColors.emerald500, blurRadius: 16),
         ],
       ),
-      child: Text(
-        text,
-        style: AppText.otpText,
-      ),
+      child: Text(text, style: AppText.otpText),
     );
   }
 }
