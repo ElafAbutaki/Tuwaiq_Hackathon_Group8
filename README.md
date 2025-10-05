@@ -195,10 +195,17 @@ lib/
 
 ---
 
-### Chat Screen
+### Chat Screen & lock 
 
 <img width="1080" height="2340" alt="Image" src="https://github.com/user-attachments/assets/4705d0f5-787a-4b85-b2d0-df2c40801c77" />
 
+<img width="1080" height="2340" alt="Image" src="https://github.com/user-attachments/assets/399f5949-a2b4-4dbe-aa86-467b89601c3e" />
+
+<img width="1080" height="2340" alt="Image" src="https://github.com/user-attachments/assets/a06b3fdc-2fe9-4675-b4ed-2f43d4398e54" />
+
+<img width="1080" height="2340" alt="Image" src="https://github.com/user-attachments/assets/30824184-183d-4f89-a43a-b093f2dfdeef" />
+
+<img width="1080" height="2340" alt="Image" src="https://github.com/user-attachments/assets/33fa77a5-5601-4f6e-8395-4da3abcf00a0" />
 
 ---
 
@@ -209,7 +216,7 @@ lib/
 | **Elaf Abutaki**         | Flutter Developer                       |
 | **Abdulaziz Abdulwahab** | Flutter Developer                       |
 | **Lujain Alshehri**      | UI/UX Designer                          |
-| **Seren Baoqail**        | UI/UX Designer                          |
+| **Sereen Baageel**       | UI/UX Designer                          |
 | **Abdulmohsen Alali**    | UI/UX Designer                          |
 
 ---
