@@ -179,15 +179,26 @@ lib/
 
 ### Home & Property Details
 
-![Home Screen](https://github.com/user-attachments/assets/yourimage3.png)
-![Property Details](https://github.com/user-attachments/assets/yourimage4.png)
+<img width="1080" height="2340" alt="Image" src="https://github.com/user-attachments/assets/f56022ae-9d41-4573-a662-fa55ee69b67e" />
+
+<img width="1080" height="2340" alt="Image" src="https://github.com/user-attachments/assets/32076698-1289-4e63-8b5e-958af54fa782" />
+
+<img width="1080" height="2340" alt="Image" src="https://github.com/user-attachments/assets/67ba2eb7-c848-47c5-9ed7-0d948381e872" />
+
+<img width="1080" height="2340" alt="Image" src="https://github.com/user-attachments/assets/a8b64248-a98a-4f43-b8b7-2694c130c0d2" />
+
+<img width="1080" height="2340" alt="Image" src="https://github.com/user-attachments/assets/edf1dce6-32bc-4c62-99b5-24031b532d46" />
+
+<img width="1080" height="2340" alt="Image" src="https://github.com/user-attachments/assets/ff031c69-f9ea-4a21-a620-0f3225af3649" />
+
+<img width="1080" height="2340" alt="Image" src="https://github.com/user-attachments/assets/7eafc4f3-349b-4d9e-a3e1-46d64434242c" />
 
 ---
 
-### Chat & Settings
+### Chat Screen
 
-![Chat Screen](https://github.com/user-attachments/assets/yourimage5.png)
-![Settings Screen](https://github.com/user-attachments/assets/yourimage6.png)
+<img width="1080" height="2340" alt="Image" src="https://github.com/user-attachments/assets/4705d0f5-787a-4b85-b2d0-df2c40801c77" />
+
 
 ---
 
